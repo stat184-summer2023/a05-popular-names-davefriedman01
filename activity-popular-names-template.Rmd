@@ -2,11 +2,7 @@
 title:  'Activity: Popular Names'
 author: "Dave Friedman"
 date:   "05 June 2023"
-output:          html_notebook
-  html_document:
-    df_print:    paged
-  html_notebook: default
-  pdf_document:  default
+output: html_notebook
 ---
 
 # Grading
