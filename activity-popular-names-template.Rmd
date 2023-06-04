@@ -1,14 +1,13 @@
 ---
-title: 'Activity: Popular Names'
-author: "YOUR NAME HERE"
-date: "DUE DATE"
-output:
+title:  'Activity: Popular Names'
+author: "Dave Friedman"
+date:   "05 June 2023"
+output:          html_notebook
   html_document:
-    df_print: paged
+    df_print:    paged
   html_notebook: default
-  pdf_document: default
+  pdf_document:  default
 ---
-
 
 # Grading
 
@@ -25,8 +24,6 @@ Assignment is worth a total of 10 points
     * correct use of `summarise()`
 * [2 points] `ggplot()` graph of first names 
 
-
-
 # Set Up
 
 ```{r, message = F, warning = F}
@@ -34,7 +31,6 @@ Assignment is worth a total of 10 points
 library(tidyverse)
 library(mosaic)
 library(esquisse)
-
 
 # Load the BabyNames data into RStudio environment (from dcData package)
 data("BabyNames", package = "dcData")
@@ -46,57 +42,66 @@ data("BabyNames", package = "dcData")
 
 For steps 5-7, pick any FIVE names you wish. I choose Arnaldo, Ahmid, Nicho, Jennaveve, and Christy. You may choose these names or any others that you would like. 
 
-
 ### Step 1
 
 *Examine the data you have at hand - for this project the data are the ones available in the `BabyNames` data set. Use at least 2 different functions to examine your data. Then answer the questions: What are the variables are available? What is a case?*
 
-My answer here.... 
+Variables
+
+1. name The given name (character string)
+2. sex F or M (character string)
+3. count The number of babies given that name and of that sex. (integer)
+4. year Year of birth (integer)
+
+Cases
+
+A case is the number of babies of a certain sex given a particular name in a given year.
 
 ```{r}
-## Look at the data a few different ways (see Ch 9 for more).
-
-
+head (x = dcData::BabyNames)
+count(x = dcData::BabyNames, sex)
+count(x = dcData::BabyNames, year) %>%
+  arrange(desc(n)) %>%
+    head(n = 10)
+select(.data = dcData::BabyNames, name, count) %>%
+  arrange(desc(count)) %>%
+    head(n = 10)
+select(.data = dcData::BabyNames, name, count) %>%
+  arrange(desc(count)) %>%
+    filter(count == 5)
 ```
 
 ### Step 2
 
 [This should be done by hand on paper, nothing to show in the HTML doc]
 
-
 ### Step 3 
 
 ##### What variable(s) from the raw data table do not appear at all in the graph?
 
-My answer here.... 
+The variable `sex` does not appear at all in the graph.
 
 ##### What variable(s) in the graph are similar to corresponding variables in the raw data table, but might have been transformed in some way?
 
-My answer here.... 
-
+The variables `year` and `count` appear as the x- and y-axis, respectively. The variable `name` is filtered down to a select subset of cases, which appear as colored lines within the `year`-`count` space.
 
 ### Step 4
 
 ##### Have cases been filtered out?
 
-My answer here.... 
-
+Yes!
 
 ##### Have cases been grouped and summarized within groups in any way?
 
-My answer here.... 
-
+No!
 
 ##### Have any new variables been introduced?  If so, what the relationship between the new variables and existing variables?
 
 My answer here.... 
 
-
 ### Step 5
 
-
 Using the BabyNames data set, filter the data to display just the 5 names that you picked.  Then group the cases by year and name, and count how many total births per year were recorded for each of the names (regardless of sex).  
-
 
 ### Step 6
 
@@ -105,14 +110,12 @@ Using the BabyNames data set, filter the data to display just the 5 names that y
 ### Step 7
 
 ```{r}
-## Create my glyph ready data set here
-
-
-# inspect the result
-
-
+GlyphReadyForm <- dcData::BabyNames %>%
+  filter(name %in% c('Abraham', 'Franklin', 'Woodrow')) %>%
+    group_by(year, name) %>%
+      summarize(total = sum(count))
+GlyphReadyForm
 ```
-
 
 ### Graph It!
 
@@ -129,14 +132,24 @@ GlyphReadyForm %>%
 
 If you prepared your `GlyphReadyForm` data set correctly, you should just be able to copy and paste this code. Alternatively, you can use `mplot` or `esquisse` to create your graph. If you choose to use these interactive functions remember, do not include the `mplot` or `esquisse` functions in your RMarkdown document. Instead, use these functions in the console and copy the generated code into your RMarkkdown document. In addition, we want lines, not dots. See examples below. 
 
-
 ```{r}
-#My code here 
-
-
+GlyphReadyForm %>%
+  ggplot() +
+    geom_line(
+      alpha     = 0.5,
+      linewidth = 1,
+      mapping   = aes(x        = year,
+                      y        = total,
+                      color    = name,
+                      linetype = name),
+      position  = 'identity',
+      stat      = 'identity',
+      show.legend=TRUE
+    ) +
+    xlab('Year') +
+    ylab('Popularity') +
+    ggtitle('Popularity of Names Over Time')
 ```
-
-
 
 #### Example of Dots versus Lines
 
@@ -157,4 +170,3 @@ GlyphReadyForm %>%
   ylab("Popularity") + 
   xlab("Year")
 ```
-
