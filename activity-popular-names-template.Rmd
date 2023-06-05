@@ -89,15 +89,19 @@ Yes!
 
 ##### Have cases been grouped and summarized within groups in any way?
 
-No!
+Cases have been grouped by year.
 
 ##### Have any new variables been introduced?  If so, what the relationship between the new variables and existing variables?
 
-My answer here.... 
+No new variables have been introduced.
 
 ### Step 5
 
 Using the BabyNames data set, filter the data to display just the 5 names that you picked.  Then group the cases by year and name, and count how many total births per year were recorded for each of the names (regardless of sex).  
+
+* Select the subset of rows whose name is one of the five chosen names via `filter(name %in% c(...))`
+* Group the rows by year, and within a given year group the rows by name via `group_by(year, name)`
+* For each year-name group, sum the count of each row to obtain a total count for that group.
 
 ### Step 6
 
